@@ -11,6 +11,7 @@ import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.intellij.psi.PsiMethod
 import org.jetbrains.uast.UCallExpression
 import org.jetbrains.uast.ULiteralExpression
+import org.jetbrains.uast.getArgumentMapping
 
 @Suppress("UnstableApiUsage")
 class HardcodedTextSizeDetector : Detector(), SourceCodeScanner {

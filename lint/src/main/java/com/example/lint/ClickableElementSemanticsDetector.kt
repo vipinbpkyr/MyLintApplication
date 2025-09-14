@@ -11,6 +11,7 @@ import com.android.tools.lint.detector.api.UastScanner
 import org.jetbrains.uast.UCallExpression
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UElementHandler
+import org.jetbrains.uast.getArgumentMapping
 
 @Suppress("UnstableApiUsage")
 class ClickableElementSemanticsDetector : Detector(), UastScanner {
