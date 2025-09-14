@@ -8,10 +8,10 @@ class IssueRegistry : IssueRegistry() {
     override val api: Int = CURRENT_API
     override val minApi: Int = 8 // optional
     override val issues: List<Issue> = listOf(
-        RawComponentDetector.ISSUE_TOUCHTARGET,
-        RawComponentDetector.ISSUE_BUTTON,
-        RawComponentDetector.ISSUE_TEXTFIELD,
-        RawComponentDetector.ISSUE_IMAGE,
-        RawComponentDetector.ISSUE_TEXT
+        ImageDetector.ISSUE_TOUCHTARGET,
+        ButtonDetector.ISSUE_BUTTON,
+        TextFieldDetector.ISSUE_TEXTFIELD,
+        ImageDetector.ISSUE_IMAGE,
+        TextDetector.ISSUE_TEXT
     )
 }
