@@ -31,6 +31,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@SuppressLint("RawTextUsage")
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
