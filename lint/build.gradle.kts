@@ -33,7 +33,7 @@ dependencies {
     val lintVersion = "31.4.1"    // for AGP 8.4.x
     val junitVersion = "4.13.2"
 
-    compileOnly("com.android.tools.lint:lint-api:$lintVersion")
+    implementation("com.android.tools.lint:lint-api:$lintVersion")
     compileOnly("org.jetbrains.kotlin:kotlin-stdlib")
 
     testImplementation("com.android.tools.lint:lint-tests:$lintVersion")
