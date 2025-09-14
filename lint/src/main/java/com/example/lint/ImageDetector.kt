@@ -11,14 +11,13 @@ import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.intellij.psi.PsiMethod
 import org.jetbrains.uast.UCallExpression
 
-@Suppress("UnstableApiUsage")
-class ImageDetector : Detector(), SourceCodeScanner {
+class  ImageDetector : Detector(), SourceCodeScanner {
 
     override fun getApplicableMethodNames() = listOf("Image", "Icon")
 
     override fun visitMethodCall(context: JavaContext, node: UCallExpression, method: PsiMethod) {
         val hasContentDesc = node.valueArguments.any { arg ->
-            arg?.sourcePsi?.text?.contains("contentDescription") == true
+            arg.sourcePsi?.text?.contains("contentDescription") == true
         }
 
         if (!hasContentDesc) {
@@ -30,7 +29,7 @@ class ImageDetector : Detector(), SourceCodeScanner {
 
         // Touch target check (common on icons)
         val sizeTooSmall = node.valueArguments.any { arg ->
-            arg?.sourcePsi?.text?.contains("dp") == true &&
+            arg.sourcePsi?.text?.contains("dp") == true &&
                     arg.sourcePsi!!.text.replace("[^0-9]".toRegex(), "").toIntOrNull()?.let {
                         it < 48
                     } == true

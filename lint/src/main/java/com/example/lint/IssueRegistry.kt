@@ -13,6 +13,7 @@ class IssueRegistry : IssueRegistry() {
         TextFieldDetector.ISSUE_TEXTFIELD,
         ImageDetector.ISSUE_IMAGE,
         TextDetector.ISSUE_TEXT,
-        SafeBrowsingDetector.MANIFEST_ISSUE
+        SafeBrowsingDetector.MANIFEST_ISSUE,
+        ColorContrastDetector.ISSUE_COLOR_CONTRAST
     )
 }
