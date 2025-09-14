@@ -7,29 +7,50 @@ import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Scope
 import com.android.tools.lint.detector.api.Severity
-import com.android.tools.lint.detector.api.SourceCodeScanner
-import com.intellij.psi.PsiMethod
+import com.android.tools.lint.detector.api.UastScanner
 import org.jetbrains.uast.UCallExpression
+import org.jetbrains.uast.UElement
+import org.jetbrains.uast.UElementHandler
 
 @Suppress("UnstableApiUsage")
-class ClickableElementSemanticsDetector : Detector(), SourceCodeScanner {
+class ClickableElementSemanticsDetector : Detector(), UastScanner {
 
-    override fun getApplicableMethodNames(): List<String> = listOf("clickable")
+    override fun getApplicableUastTypes(): List<Class<out UElement>> =
+        listOf(UCallExpression::class.java)
 
-    override fun visitMethodCall(context: JavaContext, node: UCallExpression, method: PsiMethod) {
-        val composable = node.getContainingUFile()?.classes?.firstOrNull()
-        val hasText = composable?.allMethods?.any { it.name == "Text" } ?: false
-        val hasContentDescription = node.valueArguments.any { it.parameter?.name == "contentDescription" }
+    override fun createUastHandler(context: JavaContext): UElementHandler =
+        object : UElementHandler() {
+            override fun visitCallExpression(node: UCallExpression) {
+                // Is it a composable function? (Heuristic: starts with uppercase)
+                if (node.methodName?.firstOrNull()?.isUpperCase() != true) {
+                    return
+                }
 
-        if (!hasText && !hasContentDescription) {
-            context.report(
-                ISSUE_CLICKABLE_ELEMENT_SEMANTICS,
-                node,
-                context.getNameLocation(node),
-                "Clickable element missing semantics. Provide a `contentDescription` or `text`."
-            )
+                val argumentMapping = node.getArgumentMapping()
+                val modifierArgument = argumentMapping.entries
+                    .find { it.value.name == "modifier" }
+                    ?.key
+
+                if (modifierArgument != null) {
+                    // Check if the modifier expression contains a "clickable" call
+                    val source = modifierArgument.asSourceString()
+                    if (source.contains(".clickable")) {
+                        // This is a clickable component. Now check for semantics.
+                        val hasText = argumentMapping.values.any { it.name == "text" }
+                        val hasContentDescription = argumentMapping.values.any { it.name == "contentDescription" }
+
+                        if (!hasText && !hasContentDescription) {
+                            context.report(
+                                ISSUE_CLICKABLE_ELEMENT_SEMANTICS,
+                                node,
+                                context.getNameLocation(node),
+                                "Clickable element missing semantics. Provide a `contentDescription` or `text`."
+                            )
+                        }
+                    }
+                }
+            }
         }
-    }
 
     companion object {
         private val IMPLEMENTATION = Implementation(

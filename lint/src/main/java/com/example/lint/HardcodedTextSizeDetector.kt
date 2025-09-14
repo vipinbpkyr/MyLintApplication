@@ -18,7 +18,10 @@ class HardcodedTextSizeDetector : Detector(), SourceCodeScanner {
     override fun getApplicableMethodNames() = listOf("Text")
 
     override fun visitMethodCall(context: JavaContext, node: UCallExpression, method: PsiMethod) {
-        val fontSizeArgument = node.valueArguments.find { it.parameter?.name == "fontSize" }
+        val argumentMapping = node.getArgumentMapping()
+        val fontSizeArgument = node.valueArguments.find {
+            argumentMapping[it]?.name == "fontSize"
+        }
         if (fontSizeArgument is ULiteralExpression) {
             context.report(
                 ISSUE_HARDCODED_TEXT_SIZE,

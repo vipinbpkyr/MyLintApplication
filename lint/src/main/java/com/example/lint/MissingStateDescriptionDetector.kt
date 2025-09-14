@@ -17,7 +17,10 @@ class MissingStateDescriptionDetector : Detector(), SourceCodeScanner {
     override fun getApplicableMethodNames() = listOf("Switch", "Checkbox")
 
     override fun visitMethodCall(context: JavaContext, node: UCallExpression, method: PsiMethod) {
-        val stateDescriptionArgument = node.valueArguments.find { it.parameter?.name == "stateDescription" }
+        val argumentMapping = node.getArgumentMapping()
+        val stateDescriptionArgument = node.valueArguments.find {
+            argumentMapping[it]?.name == "stateDescription"
+        }
         if (stateDescriptionArgument == null) {
             context.report(
                 ISSUE_MISSING_STATE_DESCRIPTION,
