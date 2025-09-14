@@ -13,8 +13,6 @@ class IssueRegistry : IssueRegistry() {
         TextFieldDetector.ISSUE_TEXTFIELD,
         ImageDetector.ISSUE_IMAGE,
         TextDetector.ISSUE_TEXT,
-        HardcodedTextSizeDetector.ISSUE_HARDCODED_TEXT_SIZE,
-        ClickableElementSemanticsDetector.ISSUE_CLICKABLE_ELEMENT_SEMANTICS,
-        MissingStateDescriptionDetector.ISSUE_MISSING_STATE_DESCRIPTION
+        SafeBrowsingDetector.MANIFEST_ISSUE
     )
 }
